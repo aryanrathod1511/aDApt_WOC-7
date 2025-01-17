@@ -7,10 +7,10 @@ const authenticateUser= (req,res)=> {
     try {
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
         req.user = decoded;
-        next();
+        res.status(200).json({msg:"User authenticated successfully"});
       } catch (err) {
         res.status(403).json({ error: 'Invalid token' });
       }
 };
 
-module.exports = authenticateUser;
+module.exports = {authenticateUser};

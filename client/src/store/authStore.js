@@ -16,7 +16,13 @@ export const useAuthStore = create((set, get) => ({
 
   checkAuth: async () => {
     try {
-      const res = await axiosInstance.get("/auth/check");
+      const res = await axiosInstance.get("/auth/check",{
+        headers: {
+          "Content-Type": "application/json",
+          "Accept": "application/json, text/plain, */*", 
+          "Authorization": `Bearer ${localStorage.getItem("authToken")}`, // Fixed the token key
+        },
+      });
 
       set({ authUser: res.data });
       get().connectSocket();
@@ -46,6 +52,9 @@ export const useAuthStore = create((set, get) => ({
     set({ isLoggingIn: true });
     try {
       const res = await axiosInstance.post("/auth/login", data);
+      const token = res.data.token;  
+      localStorage.setItem("authToken", token);
+    
       set({ authUser: res.data });
       toast.success("Logged in successfully");
 
@@ -75,6 +84,9 @@ export const useAuthStore = create((set, get) => ({
     set({ isLoggingIn: true });
     try {
       const res = await axiosInstance.post("/auth/adminlogin", data);
+      const token = res.data.token;  
+      localStorage.setItem("authToken", token);
+
       set({ authUser: res.data });
       toast.success("Logged in successfully");
 

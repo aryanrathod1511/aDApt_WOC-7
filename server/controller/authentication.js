@@ -1,7 +1,7 @@
 const express = require("express");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
-const { userModel } = require("../db/schema");
+const { userModel } = require("../models/user");
 const {wrapAsync} = require("../utils/wrapAsync.js");
 
 

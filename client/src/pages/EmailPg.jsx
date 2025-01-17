@@ -65,9 +65,9 @@ const EmailPg = () => {
               <div
                 className="card outline outline-primary text-primary text-2xl justify-center items-center font-bold flex hover:bg-primary hover:text-black"
                 key={index}
-                onClick={() => handleCategoryClick(category.category)}
+                onClick={() => handleCategoryClick(category.categotyName)}
               >
-                <div className="card-body">{category.category}</div>
+                <div className="card-body">{category.categoryName}</div>
               </div>
             ))}
           </div>
@@ -137,12 +137,13 @@ const EmailPg = () => {
       {what === "list" &&
         <>
           <div className="grid gap-8">
-            {emails.map((category, index) => (
+            {emails.map((email, index) => (
               <div
                 className="card outline outline-primary text-primary text-2xl justify-center items-center font-bold flex hover:bg-primary hover:text-black"
                 key={index}
               >
-                <div className="card-body"><div>{category.name}</div><div>{category.mail}</div></div>
+                <div className="card-body"><div>{email.hostName}</div></div>
+                <div>{email.emailId}</div>
               </div>
             ))}
           </div>

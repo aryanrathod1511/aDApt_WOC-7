@@ -8,6 +8,7 @@ const mongoose = require("mongoose");
 const cloudinary = require("./controller/cloudnarySetup");
 const {mailRouter} = require("./routes/mail");
 const {authRouter} = require("./routes/auth");
+const {authenticateUser} = require("./middlewares/auth");
 
 mongoose.connect(process.env.MONGODB_URL).then(()=> {console.log("Conected to db..")});;
 
@@ -16,7 +17,8 @@ app.use(cors({
     methods : ['GET', 'POST', 'DELETE','PUT'],
     credentials : true,
 
-}))
+}));
+app.get("/api/auth/check", authenticateUser);
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use("/api/mail", mailRouter);

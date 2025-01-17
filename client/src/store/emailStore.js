@@ -11,7 +11,13 @@ export const useEmailStore = create((set, get) => ({
   getCategories: async () => {
     set({ isLoading: true });
     try {
-      const res = await axiosInstance.get("/mail/categories");
+      const res = await axiosInstance.get("/mail/categories", {
+        headers: {
+          "Content-Type": "application/json",
+          "Accept": "application/json, text/plain, */*", 
+          "Authorization": `Bearer ${localStorage.getItem("authToken")}`, // Fixed the token key
+        },
+      });
       set({ categories: res.data });
     } catch (error) {
       toast.error("Failed to fetch categories.");
@@ -19,12 +25,21 @@ export const useEmailStore = create((set, get) => ({
       set({ isLoading: false });
     }
   },
+  
 
   // Fetch emails for a specific category
   getEmails: async (categoryId) => {
     set({ isLoading: true });
     try {
-      const res = await axiosInstance.get(`/mail/categories/${categoryId}/emails`);
+      const res = await axiosInstance.get(`/mail/categories/${categoryId}/emails`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            "Accept": "application/json, text/plain, */*", 
+            "Authorization": `Bearer ${localStorage.getItem("authToken")}`, // Fixed the token key
+          },
+        }
+      );
       set({ emails: res.data });
     } catch (error) {
       toast.error("Failed to fetch emails.");
@@ -37,7 +52,13 @@ export const useEmailStore = create((set, get) => ({
   addCategory: async (category) => {
     set({ isLoading: true });
     try {
-      const res = await axiosInstance.post("/mail/categories/add", {category});
+      const res = await axiosInstance.post("/mail/categories/add", {
+        headers: {
+          "Content-Type": "application/json",
+          "Accept": "application/json, text/plain, */*", 
+          "Authorization": `Bearer ${localStorage.getItem("authToken")}`, // Fixed the token key
+        },
+      },{category});
       set((state) => ({ categories: [...state.categories, res.data] }));
       toast.success("Category added successfully.");
     } catch (error) {
@@ -51,7 +72,13 @@ export const useEmailStore = create((set, get) => ({
   removeCategory: async (categoryId) => {
     set({ isLoading: true });
     try {
-      await axiosInstance.delete(`/mail/categories/${categoryId}/remove`);
+      await axiosInstance.delete(`/mail/categories/${categoryId}/remove`,{
+        headers: {
+          "Content-Type": "application/json",
+          "Accept": "application/json, text/plain, */*", 
+          "Authorization": `Bearer ${localStorage.getItem("authToken")}`, // Fixed the token key
+        },
+      });
       set((state) => ({
         categories: state.categories.filter((category) => category.category !== categoryId),
       }));
@@ -68,8 +95,13 @@ export const useEmailStore = create((set, get) => ({
     set({ isLoading: true });
     try {
       const res = await axiosInstance.post(
-        `/mail/categories/${categoryId}/emails/add`,
-        emailData
+        `/mail/categories/${categoryId}/emails/add`,{
+          headers: {
+            "Content-Type": "application/json",
+            "Accept": "application/json, text/plain, */*", 
+            "Authorization": `Bearer ${localStorage.getItem("authToken")}`, // Fixed the token key
+          },
+        },{emailData}
       );
       set((state) => ({ emails: [...state.emails, res.data] }));
       toast.success("Email added successfully.");
@@ -85,7 +117,13 @@ export const useEmailStore = create((set, get) => ({
     set({ isLoading: true });
     try {
       await axiosInstance.delete(
-        `/mail/categories/${categoryId}/emails/${emailId}/remove`
+        `/mail/categories/${categoryId}/emails/${emailId}/remove`,{
+          headers: {
+            "Content-Type": "application/json",
+            "Accept": "application/json, text/plain, */*", 
+            "Authorization": `Bearer ${localStorage.getItem("authToken")}`, // Fixed the token key
+          },
+        }
       );
       set((state) => ({
         emails: state.emails.filter((email) => email._id !== emailId),

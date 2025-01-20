@@ -4,9 +4,7 @@ const ObjectId = mongoose.Types.ObjectId;
 
 const emailSchema = new Schema({
     emailId: {
-        type: String,
-        required: true,
-        unique: true, 
+        type: String, 
     },
     hostName: String,
     categoryId : ObjectId,

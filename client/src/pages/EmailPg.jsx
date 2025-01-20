@@ -24,6 +24,7 @@ const EmailPg = () => {
 
   const handleAction = async () => {
     if (it === "add" && inputValue.trim() !== "") {
+      console.log("Input value is " + inputValue);
       await addCategory(inputValue);
     } else if (it === "remove" && inputValue.trim() !== "") {
       await removeCategory(inputValue);

@@ -91,7 +91,7 @@ const adminLogin = wrapAsync(async (req, res) => {
 
   // Check password and admin code
   const isPasswordCorrect = await bcrypt.compare(password, user.password);
-  const isAdminCodeCorrect = user.admincode === process.env.ADMIN_KEY;
+  const isAdminCodeCorrect = admincode === process.env.ADMIN_KEY;
 
   if (!isPasswordCorrect || !isAdminCodeCorrect) {
     return res.status(401).json({ msg: "Invalid credentials" });
@@ -100,7 +100,7 @@ const adminLogin = wrapAsync(async (req, res) => {
   // Generate token
   const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET);
 
-  res.status(200).json({ msg: "Login successful", token });
+  res.status(200).json({ msg: "Login successful", token, isAdmin: true });
 });
 
 module.exports = {

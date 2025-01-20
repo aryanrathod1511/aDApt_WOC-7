@@ -16,21 +16,19 @@ const fetchCategories = wrapAsync( async (req, res) => {
 const fetchEmails =  wrapAsync(async (req, res) => {
   const { categoryId } = req.params;
   const decodedCategory = decodeURIComponent(categoryId); 
-  console.log("Finding emails for " + decodedCategory);
 
   const category = await categoryModel.find({categoryName: decodedCategory});
   const category_id = category._id;
-  console.log("Category Id is : " + category_id);
 
   // Fetch emails
   const emails = await emailModel.find({categoryId: category_id});
-  console.log("Fetched emails : ", emails);
 
   res.status(200).json(emails);
 });
-
+//add a category
 const addCategory = wrapAsync(async (req, res) => {
     const { category } = req.body;
+    console.log("received category is " + category);
     if (!category) return res.status(400).json({ error: "Category is required." });
 
     const newCategory = await categoryModel.create({ categoryName: category });

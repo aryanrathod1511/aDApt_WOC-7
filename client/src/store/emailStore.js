@@ -52,13 +52,13 @@ export const useEmailStore = create((set, get) => ({
   addCategory: async (category) => {
     set({ isLoading: true });
     try {
-      const res = await axiosInstance.post("/mail/categories/add", {
+      const res = await axiosInstance.post("/mail/categories/add", {category},{
         headers: {
           "Content-Type": "application/json",
           "Accept": "application/json, text/plain, */*", 
           "Authorization": `Bearer ${localStorage.getItem("authToken")}`, // Fixed the token key
         },
-      },{category});
+      });
       set((state) => ({ categories: [...state.categories, res.data] }));
       toast.success("Category added successfully.");
     } catch (error) {

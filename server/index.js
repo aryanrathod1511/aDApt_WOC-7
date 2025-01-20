@@ -9,6 +9,7 @@ const cloudinary = require("./controller/cloudnarySetup");
 const {mailRouter} = require("./routes/mail");
 const {authRouter} = require("./routes/auth");
 const {authenticateUser} = require("./middlewares/auth");
+const {qnaRouter} = require("./routes/qna");
 
 mongoose.connect(process.env.MONGODB_URL).then(()=> {console.log("Conected to db..")});;
 
@@ -23,6 +24,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use("/api/mail", mailRouter);
 app.use("/api/auth", authRouter);
+app.use("/api/qna/categories", qnaRouter);
 
 
 app.get("/",(req,res)=>{

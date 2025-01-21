@@ -119,7 +119,7 @@ const QnAPg = () => {
                 key={index}
                 onClick={() => handleCategoryClick(category)}
               >
-                <div className="card-body">{category.categoryName}</div>
+                <div className="card-body">{category}</div>
               </div>
             ))}
           </div>

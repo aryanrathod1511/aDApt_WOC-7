@@ -6,6 +6,7 @@ env.config();
 const bcrypt = require("bcrypt");
 const mongoose = require("mongoose");
 const cloudinary = require("./controller/cloudnarySetup");
+const multer = require("multer");
 const {mailRouter} = require("./routes/mail");
 const {authRouter} = require("./routes/auth");
 const {authenticateUser} = require("./middlewares/auth");
@@ -19,7 +20,7 @@ app.use(cors({
     credentials : true,
 
 }));
-app.get("/api/auth/check", authenticateUser);
+//app.get("/api/auth/check", authenticateUser);
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use("/api/mail", mailRouter);

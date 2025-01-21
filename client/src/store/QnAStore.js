@@ -70,7 +70,7 @@ export const useQnAStore = create((set, get) => ({
         try {
             const res = await axiosInstance.get(`/qna/categories/${category}/questions`);
             set({ questions: res.data });
-            console.log(res.data)
+            console.log(res.data);
             console.log("Updated questions:", get().questions);
         } catch (error) {
             toast.error("Failed to fetch questions.");
@@ -101,7 +101,7 @@ export const useQnAStore = create((set, get) => ({
         try {
             console.log("IT's a qdata")
             console.log(questionData.text)
-            console.log(questionData.image)
+            console.log(questionData.file)
             const res = await axiosInstance.post(
                 `/qna/categories/${category}/questions`,
                 questionData,

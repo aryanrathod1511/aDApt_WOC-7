@@ -66,7 +66,7 @@ const EmailPg = () => {
               <div
                 className="card outline outline-primary text-primary text-2xl justify-center items-center font-bold flex hover:bg-primary hover:text-black"
                 key={index}
-                onClick={() => handleCategoryClick(category.categotyName)}
+                onClick={() => handleCategoryClick(category.categoryName)}
               >
                 <div className="card-body">{category.categoryName}</div>
               </div>

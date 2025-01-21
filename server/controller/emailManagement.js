@@ -3,7 +3,6 @@ const {emailModel} = require("../models/email");
 const {categoryModel} = require("../models/category");
 const {wrapAsync} = require("../utils/wrapAsync");
 const expressError = require("../utils/expressError");
-//const { router } = require("../routes/mail");
 
 //fetch all categories
 const fetchCategories = wrapAsync( async (req, res) => {
@@ -13,18 +12,21 @@ const fetchCategories = wrapAsync( async (req, res) => {
   });
 
 //fetch all emails
-const fetchEmails =  wrapAsync(async (req, res) => {
-  const { categoryId } = req.params;
-  const decodedCategory = decodeURIComponent(categoryId); 
+const fetchEmails = wrapAsync(async (req, res) => {
+    const categoryId  = req.params.categoryId;  
+    const decodedCategory = decodeURIComponent(categoryId);
+    // Fetch the category by its name
+    const category = await categoryModel.findOne({ categoryName: decodedCategory });
+    if (!category) {
+        return res.status(404).json({ error: "Category not found." });
+    }
 
-  const category = await categoryModel.find({categoryName: decodedCategory});
-  const category_id = category._id;
+    // Fetch emails associated with the category
+    const emails = await emailModel.find({ categoryId: category._id });
 
-  // Fetch emails
-  const emails = await emailModel.find({categoryId: category_id});
-
-  res.status(200).json(emails);
+    res.status(200).json(emails);
 });
+
 //add a category
 const addCategory = wrapAsync(async (req, res) => {
     const { category } = req.body;
@@ -48,28 +50,27 @@ const deleteCategory = wrapAsync(async (req, res) => {
 
 //add email ID
 const addEmailId = wrapAsync(async (req, res) => {
-  const { categoryId } = req.params;
-  const decodedCategory = decodeURIComponent(categoryId);
-  const { mail, name } = req.body;
-  
-      // Find the category by its name
-      const category = await categoryModel.findOne({ categoryName: decodedCategory });
+    const { categoryId } = req.params; 
+    const decodedCategory = decodeURIComponent(categoryId); 
+    const { mail, name } = req.body.emailData;
+    const category = await categoryModel.findOne({ categoryName: decodedCategory });
 
-      // If category is not found, return an error
-      if (!category) {
-          return res.status(404).json({ error: "Category not found." });
-      }
+    if (!category) {
+        return res.status(404).json({ error: "Category not found." });
+    }
 
-      const newEmail = await emailModel.create({
-          emailId: mail,
-          hostName: name,    
-          category: category._id, 
-      });
+    // Create a new email document
+    const newEmail = await emailModel.create({
+        emailId: mail,        
+        hostName: name,        
+        categoryId: category._id, 
+    });
 
-      // Respond with success and the created email
-      res.status(201).json({ msg: "Email added successfully!", email: newEmail });
+    console.log("New Email: ", newEmail);
 
+    res.status(201).json({ msg: "Email added successfully!", email: newEmail });
 });
+
 
 //remove emailID
 const removeEmailId = wrapAsync( async (req, res) => {

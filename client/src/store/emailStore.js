@@ -95,13 +95,14 @@ export const useEmailStore = create((set, get) => ({
     set({ isLoading: true });
     try {
       const res = await axiosInstance.post(
-        `/mail/categories/${categoryId}/emails/add`,{
+        `/mail/categories/${categoryId}/emails/add`,{emailData},
+        {
           headers: {
             "Content-Type": "application/json",
             "Accept": "application/json, text/plain, */*", 
             "Authorization": `Bearer ${localStorage.getItem("authToken")}`, // Fixed the token key
           },
-        },{emailData}
+        }
       );
       set((state) => ({ emails: [...state.emails, res.data] }));
       toast.success("Email added successfully.");

@@ -8,7 +8,7 @@ const queCategorySchema = new Schema({
         type: String,
         required: true,
     },
-    questions:ObjectId,
+    questions:[ObjectId],
 });
 
 const Quecategory = new mongoose.model("Quecategory", queCategorySchema);

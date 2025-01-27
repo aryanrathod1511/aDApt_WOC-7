@@ -8,26 +8,9 @@ cloudinary.config({
 });
 
 
-const uploadOnCloudinary = async (localFilePath)=> {
-    try{
-        if(!localFilePath){
-            throw new Error("Invalid File Path");
-        }
-        const result = await cloudinary.uploader.upload(localFilePath,{resource_type: "auto"} );
 
-        console.log("File uploaded successfully");
-        console.log(result.url);
-        return result;
 
-    } catch (error) {
-        console.log("Error in uploading file on cloudinary", error);
-        fs.unlinkSync(localFilePath); //remove file from local storage
-        return null; 
-    }
-}
+module.exports = cloudinary;
 
-module.exports = {
-    cloudinary : cloudinary,
-    uploadOnCloudinary : uploadOnCloudinary,
-}
+
 

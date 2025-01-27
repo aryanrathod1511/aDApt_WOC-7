@@ -13,13 +13,27 @@ const io = socketIo(server, {
 });
 
 io.on("connection", (socket) => {
-  console.log("New client connected");
+  console.log(`User connected: ${socket.id}`);
 
-  // Handle disconnection
+  // Get userId from query
+  const userId = socket.handshake.query.userId;
+  console.log(`User ID: ${userId}`);
+
+  // Emit online users
+  //socket.emit("getOnlineUsers", Array.from(io.sockets.sockets.keys()));
+
+  // Handle disconnect
   socket.on("disconnect", () => {
-    console.log("Client disconnected");
+    console.log(`User disconnected: ${socket.id}`);
   });
 });
+
+// Run WebSocket server on a different port (e.g., 4000)
+server.listen(4000, () => {
+  console.log("WebSocket server running on port 4000");
+});
+
+
 
 // Export the server and io instance (optional, if needed in other files)
 module.exports = { server, io };

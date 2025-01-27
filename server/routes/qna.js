@@ -5,6 +5,12 @@ const {wrapAsync} = require("../utils/wrapAsync");
 const router = express.Router();
 const {fetchCategory, addCategory, removeCategory,} = require("../controller/queCategory");
 const {fetchQue, addQue} = require("../controller/question");
+const multer = require("multer");
+const storage = multer.memoryStorage();
+const upload = multer({storage: storage});
+const fs = require('fs');
+const path = require('path');
+
 
 //fetch all categories
 router.get("/", fetchCategory);
@@ -19,7 +25,7 @@ router.delete("/:category/remove", removeCategory);
 router.get("/:category/questions", fetchQue);
 
 //add a question to a category
-router.post("/:category/questions" , addQue);
+router.post("/:category/questions" ,upload.single('image'), addQue);
 
 //delete a question from a category
 module.exports = {

@@ -1,5 +1,6 @@
 const express = require("express");
 const app = express();
+const bodyParser = require("body-parser");
 const cors = require("cors");
 const env = require("dotenv");
 env.config(); 
@@ -15,6 +16,7 @@ const {server} = require("./config/socketConfig");
 
 mongoose.connect(process.env.MONGODB_URL).then(()=> {console.log("Conected to db..")});;
 
+app.use(bodyParser.json({ limit: '10mb' }));
 app.use(cors({
     origin : 'http://localhost:5173',
     methods : ['GET', 'POST', 'DELETE','PUT'],

@@ -13,8 +13,7 @@ const queSchema = new Schema({
         required: true
     },
     image: {
-      data: Buffer,         
-      contentType: String,  // Store the MIME type (e.g., "image/png", "image/jpeg")
+      type : String, 
     },
 
 });

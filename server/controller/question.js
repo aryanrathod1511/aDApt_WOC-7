@@ -2,10 +2,10 @@ const express = require("express");
 const {queCategoryModel} = require("../models/queCategory");
 const {queModel} = require("../models/que");
 const {wrapAsync} = require("../utils/wrapAsync");
-const multer = require("multer");
+const cloudinary = require("../config/cloudnarySetup");
 const fs = require('fs');
+const multer = require("multer");
 const path = require('path');
-
 const storage = multer.memoryStorage();
 const upload = multer({storage: storage});
 
@@ -25,54 +25,43 @@ const fetchQue = wrapAsync(async (req, res) => {
 
 
 
-const addQue = [
-    upload.single('image'), // Middleware to process the file upload
-    wrapAsync(async (req, res) => {
-        const category = decodeURIComponent(req.params.category);
+const addQue = wrapAsync(async (req, res) => {
+    const category = decodeURIComponent(req.params.category);
 
-        const categoryObj = await queCategoryModel.findOne({ categoryName: category });
-        if (!categoryObj) return res.status(404).json({ msg: "Category not found" });
-    
-        const { text, image } = req.body;
-    
-        let fileData = null;
-        let fileType = null;
-    
-        if (image) {
-            // Decode Base64 string
-            const matches = image.match(/^data:(.+?);base64,(.+)$/);
-            if (!matches) {
-                return res.status(400).json({ msg: "Invalid Base64 string" });
-            }
-    
-            fileType = matches[1]; // MIME type (e.g., 'image/png')
-            const base64Data = matches[2]; // Base64 data
-    
-            fileData = Buffer.from(base64Data, 'base64');
-        }
-        
-      
+    const categoryObj = await queCategoryModel.findOne({ categoryName: category });
+    if (!categoryObj) return res.status(404).json({ msg: "Category not found" });
+
+    const { text, file } = req.body;
+
+    try {
+        // Upload image to Cloudinary
+        const result = await cloudinary.uploader.upload(`data:image/jpeg;base64,${file}`, {
+            resource_type: "auto"  // Automatically detect the type of the uploaded file
+        });
+
         // Save the question to the database
         const newQuestion = new queModel({
             text,
             categoryId: categoryObj._id,
-            image: fileData
-                ? {
-                      data: fileData,
-                      contentType: fileType,
-                  }
-                : null,
+            image: result.secure_url 
         });
-    
+
         const savedQuestion = await newQuestion.save();
         console.log("New Question Saved: ", savedQuestion);
-    
-        categoryObj.questions.push(savedQuestion._id); // Push the question's ObjectId
+
+        // Push the question's ObjectId to the category's question list
+        categoryObj.questions.push(savedQuestion._id); 
         await categoryObj.save();
-    
-        res.status(201).json({ msg: "Question added successfully!" });
-    }),
-];
+
+       
+        res.status(201).send(savedQuestion);
+
+    } catch (error) {
+        console.log("Error during file upload:", error);
+        res.status(500).json({ msg: "Error uploading file to Cloudinary", error });
+    }
+});
+
 
 
 module.exports = {

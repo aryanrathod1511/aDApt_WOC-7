@@ -198,11 +198,11 @@ const QnAPg = () => {
                 className="card outline outline-primary outline-2 shadow-2xl flex flex-col m-2 hover:bg-primary hover:text-black transition-colors"
                 key={question._id || question.text}
                 onClick={() =>
-                  handleQuestionClick(question._id, question.file, question.text)
+                  handleQuestionClick(question._id, question.image, question.text)
                 }
               >
                 <figure>
-                  <img src={question.file || questionMarkImage} alt="Question" />
+                  <img src={question.image || questionMarkImage} alt="Question" />
                 </figure>
                 <div className="card-body text-xl">
                   <p>{truncateText(question.text, 50)}</p>

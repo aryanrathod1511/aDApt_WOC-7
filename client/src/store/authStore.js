@@ -23,7 +23,7 @@ export const useAuthStore = create((set, get) => ({
           "Authorization": `Bearer ${localStorage.getItem("authToken")}`, // Fixed the token key
         },
       });
-
+      console.log("authUser is ", res.data);
       set({ authUser: res.data });
       get().connectSocket();
     } catch (error) {
@@ -125,15 +125,19 @@ export const useAuthStore = create((set, get) => ({
 
   connectSocket: () => {
     const { authUser } = get();
-    if (!authUser || get().socket?.connected) return;
-
-    const socket = io("http://localhost:5001", {
+    if (!authUser || get().socket?.connected){
+      console.log("No user or socket already connected");
+      return;
+    }
+ 
+    const socket = io("http://localhost:3000", {
       query: {
-        userId: authUser._id,
+        userId: authUser.user.userId,
       },
       transports: ["websocket"],
     });
     socket.connect();
+    console.log("Socket connected");
 
     set({ socket: socket });
 

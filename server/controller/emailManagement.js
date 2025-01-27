@@ -3,6 +3,7 @@ const {emailModel} = require("../models/email");
 const {categoryModel} = require("../models/category");
 const {wrapAsync} = require("../utils/wrapAsync");
 const expressError = require("../utils/expressError");
+const category = require("../models/category");
 
 //fetch all categories
 const fetchCategories = wrapAsync( async (req, res) => {
@@ -41,11 +42,17 @@ const addCategory = wrapAsync(async (req, res) => {
 //delete a category
 const deleteCategory = wrapAsync(async (req, res) => {
 
-      const { categoryId } = req.params;
-      const response = await categoryModel.findByIdAndDelete(categoryId);
-      if (!response) return res.status(404).json({ error: "Category not found." });
-  
-      res.status(200).json({ msg: "Category removed successfully!", category: response });
+    const { categoryId } = req.params;
+    console.log("Category ID:", categoryId);
+    
+    const response = await categoryModel.findOneAndDelete({ categoryName: categoryId });
+    
+    if (!response) {
+      return res.status(404).json({ error: "Category not found." });
+    }
+    
+    res.status(200).json({ msg: "Category removed successfully!", category: response });
+    
 });
 
 //add email ID
@@ -65,8 +72,6 @@ const addEmailId = wrapAsync(async (req, res) => {
         hostName: name,        
         categoryId: category._id, 
     });
-
-    console.log("New Email: ", newEmail);
 
     res.status(201).json({ msg: "Email added successfully!", email: newEmail });
 });

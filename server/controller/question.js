@@ -50,7 +50,8 @@ const addQue = [
     
             fileData = Buffer.from(base64Data, 'base64');
         }
-    
+        
+      
         // Save the question to the database
         const newQuestion = new queModel({
             text,

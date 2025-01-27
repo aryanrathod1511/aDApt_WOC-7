@@ -5,12 +5,13 @@ const env = require("dotenv");
 env.config(); 
 const bcrypt = require("bcrypt");
 const mongoose = require("mongoose");
-const cloudinary = require("./controller/cloudnarySetup");
+const cloudinary = require("./config/cloudnarySetup");
 const multer = require("multer");
 const {mailRouter} = require("./routes/mail");
 const {authRouter} = require("./routes/auth");
 const {authenticateUser} = require("./middlewares/auth");
 const {qnaRouter} = require("./routes/qna");
+const {server} = require("./config/socketConfig");
 
 mongoose.connect(process.env.MONGODB_URL).then(()=> {console.log("Conected to db..")});;
 
@@ -20,19 +21,13 @@ app.use(cors({
     credentials : true,
 
 }));
-//app.get("/api/auth/check", authenticateUser);
+
+app.get("/api/auth/check", authenticateUser);
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use("/api/mail", mailRouter);
 app.use("/api/auth", authRouter);
 app.use("/api/qna/categories", qnaRouter);
 
-
-app.get("/",(req,res)=>{
-    console.log("Server is working");
-    res.json({
-        msg:"Working fine!"
-    })
-})
 
 app.listen(process.env.PORT, ()=>{console.log("App is listening..")});

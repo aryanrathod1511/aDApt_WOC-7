@@ -107,9 +107,11 @@ export const useQnAStore = create((set, get) => ({
                 questionData,
                 {
                     headers: {
-                        'Content-Type': 'multipart/form-data',
+                      "Content-Type": "application/json",
+                      "Accept": "application/json, text/plain, */*", 
+                      "Authorization": `Bearer ${localStorage.getItem("authToken")}`, // Fixed the token key
                     },
-                }
+                  }
             );
             set((state) => ({
                 questions: [...state.questions, res.data],

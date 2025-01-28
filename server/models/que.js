@@ -13,7 +13,12 @@ const queSchema = new Schema({
         required: true
     },
     image: {
-      type : String, 
+      url : {
+        type:String,
+      },
+      public_id : {
+        type:String,
+      }
     },
 
 });

@@ -23,8 +23,6 @@ const fetchQue = wrapAsync(async (req, res) => {
    
 });
 
-
-
 const addQue = wrapAsync(async (req, res) => {
     const category = decodeURIComponent(req.params.category);
 
@@ -36,14 +34,20 @@ const addQue = wrapAsync(async (req, res) => {
     try {
         // Upload image to Cloudinary
         const result = await cloudinary.uploader.upload(`data:image/jpeg;base64,${file}`, {
-            resource_type: "auto"  // Automatically detect the type of the uploaded file
+            resource_type: "auto",
+            folder : `Qna/question/${category}/images`,
+        }, (error) => {
+            if (error) throw new Error(error);
         });
 
         // Save the question to the database
         const newQuestion = new queModel({
             text,
             categoryId: categoryObj._id,
-            image: result.secure_url 
+            image: {
+                url: result.secure_url,
+                public_id: result.public_id // Save the public_id to delete the image later
+            }
         });
 
         const savedQuestion = await newQuestion.save();
@@ -61,8 +65,6 @@ const addQue = wrapAsync(async (req, res) => {
         res.status(500).json({ msg: "Error uploading file to Cloudinary", error });
     }
 });
-
-
 
 module.exports = {
     fetchQue,

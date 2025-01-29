@@ -261,7 +261,7 @@ const QnAPg = () => {
                 <div className="chat-bubble flex flex-col">
                   {answer.file && (
                     <img
-                      src={answer.file || "https://via.placeholder.com/150"}
+                      src={answer.image.url || "https://via.placeholder.com/150"}
                       alt="Content"
                       className="sm:max-w-[200px] rounded-md mb-2"
                     />

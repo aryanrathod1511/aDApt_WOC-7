@@ -5,6 +5,7 @@ const {wrapAsync} = require("../utils/wrapAsync");
 const router = express.Router();
 const {fetchCategory, addCategory, removeCategory,} = require("../controller/queCategory");
 const {fetchQue, addQue} = require("../controller/question");
+const {fetchAns, addAns} = require("../controller/answer");
 const multer = require("multer");
 const storage = multer.memoryStorage();
 const upload = multer({storage: storage});
@@ -21,13 +22,23 @@ router.post("/add", addCategory);
 //delete a category
 router.delete("/:category/remove", removeCategory);
 
+
+
+
 //fetch all questions of a category
 router.get("/:category/questions", fetchQue);
 
 //add a question to a category
 router.post("/:category/questions" ,upload.single('image'), addQue);
 
-//delete a question from a category
+
+
+
+//fetch all answer
+router.get("/:category/answers/get", fetchAns);
+
+//add an answer
+router.post("/:category/answers/", upload.single('image'), addAns);
 module.exports = {
     qnaRouter: router,
 }

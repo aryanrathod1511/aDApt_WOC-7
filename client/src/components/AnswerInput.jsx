@@ -59,7 +59,7 @@ const AnswerInput = ({ questionId, category }) => {
         }
 
         setQId(questionId)
-        console.log("I'm called")
+        console.log("I'm called: ", questionId);
         try {
             const formData = {
                 questionId,
